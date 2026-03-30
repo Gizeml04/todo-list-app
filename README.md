@@ -6,7 +6,6 @@ Simple task management web application built with HTML, CSS, and JavaScript.
 - Add tasks
 - Delete tasks
 - Mark tasks as completed
-- Save tasks using localStorage
 
 ## Technologies
 - HTML
