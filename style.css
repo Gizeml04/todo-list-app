@@ -51,6 +51,7 @@ body
     align-items: center;
     justify-content: center;
     color: #fff6ea;
+    margin: 0 auto;
 }
 
 .progress-container
@@ -94,17 +95,16 @@ body
 {
     grid-area: input-container;
     display: flex;
-    gap: 5px;
+    gap: 10px;
     width: 100%;
+    align-items: center;
 }
 
 .input-container input
 {   
     flex: 1;
-    border: none;
     border-radius: 30px;
     outline: none;
-    padding: 5px;
     background-color: #fff6ea;
     color: #7b7b7b;
     min-width: 0;
@@ -112,6 +112,9 @@ body
     padding: 10px;
     font-size: 20px;
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    border: #cbc9b5 solid 5px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-container button
@@ -121,9 +124,12 @@ body
     background-color: #202d10;
     color: #fff6ea;
     cursor: pointer;
-    width: 55px;
-    height: 55px;
+    width: 60px;
+    height: 60px;
     font-size: 35px;
+    border-radius: 20px;
+    border: #4e592d solid 5px;
+
 }
 
 .input-container button:hover
@@ -195,7 +201,8 @@ body
 
 .date-container:hover,
 .progress-container:hover,
-.task-container:hover
+.task-container:hover,
+.input-container input:hover
 {
     transform: translateY(-3px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
