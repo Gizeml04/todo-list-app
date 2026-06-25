@@ -16,13 +16,30 @@ function updateDate() {
 
 updateDate();
 
-
 const addBtn = document.querySelector('.input-container button');
 const taskInput = document.getElementById('taskInput');
 const tasksContainer = document.querySelector('.task-container');
 const progressBar = document.querySelector('.progress-bar');
 
 let tasks = [];
+
+function saveTasks() {
+    localStorage.setItem('todoTasks', JSON.stringify(tasks));
+}
+
+function loadTasks() {
+    const stored = localStorage.getItem('todoTasks');
+    if (!stored) return;
+
+    try {
+        tasks = JSON.parse(stored);
+        tasks.forEach(task => renderTask(task));
+        updateProgress();
+    } catch (error) {
+        console.error('Failed to load tasks:', error);
+        tasks = [];
+    }
+}
 
 function updateProgress() {
     if (tasks.length === 0) {
@@ -37,20 +54,16 @@ function updateProgress() {
     progressBar.style.backgroundColor = percent === 100 ? 'green' : '#667538';
 }
 
-function addTask(text) {
-    if (!text.trim()) return;
-
-    const task = { text, completed: false };
-    tasks.push(task);
-
+function renderTask(task) {
     const taskElem = document.createElement('div');
     taskElem.classList.add('task-item');
+    if (task.completed) taskElem.classList.add('completed');
 
     const icon = document.createElement('span');
     icon.classList.add('icon');
 
     const taskText = document.createElement('span');
-    taskText.textContent = text;
+    taskText.textContent = task.text;
     taskText.classList.add('task-text');
     
     const deleteBtn = document.createElement('button');
@@ -61,21 +74,31 @@ function addTask(text) {
         e.stopPropagation();
         tasksContainer.removeChild(taskElem);
         tasks = tasks.filter(t => t !== task);
+        saveTasks();
+        updateProgress();
+    });
+
+    taskElem.addEventListener('click', () => {
+        task.completed = !task.completed;
+        taskElem.classList.toggle('completed');
+        saveTasks();
         updateProgress();
     });
 
     taskElem.appendChild(icon);
     taskElem.appendChild(taskText);
     taskElem.appendChild(deleteBtn);
-
-    taskElem.addEventListener('click', () => {
-        task.completed = !task.completed;
-        taskElem.classList.toggle('completed');
-        updateProgress();
-    });
-
     tasksContainer.appendChild(taskElem);
+}
+
+function addTask(text) {
+    if (!text.trim()) return;
+
+    const task = { text, completed: false };
+    tasks.push(task);
+    renderTask(task);
     taskInput.value = '';
+    saveTasks();
     updateProgress();
 }
 
@@ -84,3 +107,5 @@ addBtn.addEventListener('click', () => addTask(taskInput.value));
 taskInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addTask(taskInput.value);
 });
+
+loadTasks();
